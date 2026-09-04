@@ -68,7 +68,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
 
     const tick = (time: number) => {
-      if (time - last > 400) scrollStore.remeasureAll();
+      // Periodic re-measure catches lazy images and font swaps changing section
+      // heights. `last` has to advance or this becomes a full layout read of
+      // every section on every frame.
+      if (time - last > 400) {
+        last = time;
+        scrollStore.remeasureAll();
+      }
       lenis?.raf(time);
       if (reduced) commit(window.scrollY);
       raf = requestAnimationFrame(tick);

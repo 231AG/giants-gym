@@ -96,15 +96,20 @@ export default function Space() {
       </div>
 
       {/* Ticker -------------------------------------------------------------- */}
-      <motion.div
-        className="mt-24 border-y border-rule/60 py-5 lg:mt-36"
-        style={{ x: s(strip) }}
-      >
-        <Marquee
-          className="display text-[clamp(1.75rem,4.5vw,3.5rem)] leading-none text-iron"
-          items={["CHALK ALLOWED", "24/7 ACCESS", "NO MIRRORS SELFIES", "CALIBRATED PLATES", "OPEN PLATFORM"]}
-        />
-      </motion.div>
+      <div className="mt-24 overflow-hidden border-y border-rule/60 py-5 lg:mt-36">
+        <motion.div style={{ x: s(strip) }}>
+            <Marquee
+            className="display text-[clamp(1.75rem,4.5vw,3.5rem)] leading-none text-iron"
+            items={[
+              "CHALK ALLOWED",
+              "24/7 ACCESS",
+              "NO MIRRORS SELFIES",
+              "CALIBRATED PLATES",
+              "OPEN PLATFORM",
+            ]}
+          />
+        </motion.div>
+      </div>
 
       {/* Facility figures ---------------------------------------------------- */}
       <div className="shell mt-20 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">

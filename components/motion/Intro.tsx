@@ -18,6 +18,13 @@ import { site } from "@/config/site";
  * is already interactive, the 3D layer is loading behind it, and the whole thing
  * is over in ~2.1s. `introProgress` is published to the scroll store as the
  * curtain opens, which is what cues the dumbbell to fly in from off-stage right.
+ *
+ * It deliberately renders on the server as well. Gating it behind a `mounted`
+ * flag meant the hero painted first and was then covered a beat later once React
+ * hydrated — the exact flash the curtain exists to prevent. Both sides start at
+ * phase "black", so hydration matches; the blocking script in the root layout
+ * takes the curtain straight back out for anyone who should not be seeing it,
+ * before the first paint rather than after it.
  */
 
 type Phase = "black" | "impact" | "word" | "open" | "done";
@@ -25,7 +32,6 @@ type Phase = "black" | "impact" | "word" | "open" | "done";
 export default function Intro() {
   const reduced = usePrefersReducedMotion();
   const [phase, setPhase] = useState<Phase>("black");
-  const [mounted, setMounted] = useState(false);
 
   const finish = useCallback(() => {
     setPhase("done");
@@ -34,8 +40,6 @@ export default function Intro() {
   }, []);
 
   useEffect(() => {
-    setMounted(true);
-
     if (!willPlayIntro()) {
       scrollStore.introProgress = 1;
       setPhase("done");
@@ -82,14 +86,13 @@ export default function Intro() {
     };
   }, [phase, finish]);
 
-  if (!mounted) return null;
-
   const opening = phase === "open";
 
   return (
     <AnimatePresence>
       {phase !== "done" && (
         <motion.div
+          data-intro-curtain
           className="fixed inset-0 z-[90]"
           aria-hidden
           initial={false}

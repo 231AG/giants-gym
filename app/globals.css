@@ -53,6 +53,7 @@
   html {
     background: var(--color-void);
     -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
   }
 
   body {
@@ -61,7 +62,7 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv05";
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -74,6 +75,12 @@
     outline: 2px solid var(--color-volt);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  /* The curtain is server-rendered, so it must be removable before hydration —
+     otherwise a returning visitor stares at black until the JS lands. */
+  html[data-intro="skip"] [data-intro-curtain] {
+    display: none !important;
   }
 
   /* Lenis keeps html/body in a fixed frame while it transforms the content. */

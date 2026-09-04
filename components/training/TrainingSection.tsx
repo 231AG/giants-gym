@@ -91,7 +91,7 @@ export default function TrainingSection() {
           {/* The index                                                         */}
           {/* ---------------------------------------------------------------- */}
           <ul className="relative -mx-2">
-            {programs.map((program, i) => {
+            {programs.map((program) => {
               const isActive = program.id === active;
               const isOpen = openMobile === program.id;
               return (

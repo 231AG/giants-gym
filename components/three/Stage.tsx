@@ -132,15 +132,17 @@ export default function Stage({ detail = "high" }: { detail?: Detail }) {
 
       // ACT 1 HERO: enters from off-screen right, settles right-of-centre.
       const h = smoothstep(0, 1, heroP);
-      const heroRestX = lerp(0.05, 1.95, wide);
-      const heroRestY = lerp(0.95, -0.12, wide);
+      // On a phone the object sits high and small, clear of the headline block —
+      // it is a presence above the type, not a thing the type has to dodge.
+      const heroRestX = lerp(0.42, 1.95, wide);
+      const heroRestY = lerp(1.42, -0.12, wide);
       let x = mapRange(enter, 0, 1, lerp(3.2, 5.6, wide), heroRestX) + h * -0.35 * wide;
       let y = heroRestY - h * 0.35 + (1 - enter) * 0.5;
       let z = 0;
       let rx = 0.08 + h * 0.05;
       let ry = -1.15 - enter * 0.25 - h * 0.5;
       let rz = 0.16 + h * 0.22;
-      let sc = lerp(0.62, 0.86, wide) + enter * 0.14 * wide;
+      let sc = lerp(0.5, 0.86, wide) + enter * 0.14 * wide;
       let camZ = REST.camZ - h * 0.5;
       let camY = h * 0.18;
 
@@ -148,7 +150,7 @@ export default function Stage({ detail = "high" }: { detail?: Detail }) {
       if (a2 > 0) {
         const e = smoothstep(0, 1, a2);
         x = mapRange(e, 0, 1, x, lerp(-0.15, -1.75, wide));
-        y = mapRange(e, 0, 1, y, lerp(0.85, 0.15, wide));
+        y = mapRange(e, 0, 1, y, lerp(1.25, 0.15, wide));
         rz = mapRange(e, 0, 1, rz, 1.34);
         ry = mapRange(e, 0, 1, ry, -2.15);
         rx = mapRange(e, 0, 1, rx, -0.1);

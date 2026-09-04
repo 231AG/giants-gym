@@ -73,12 +73,12 @@ export default function Nav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ash transition-colors duration-[--duration-micro] hover:text-bone"
+                className="group relative py-2.5 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ash transition-colors duration-[--duration-micro] hover:text-bone"
               >
                 {item.label}
                 <span
                   aria-hidden
-                  className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-volt transition-transform duration-[--duration-ui] ease-[--ease-heavy] group-hover:scale-x-100"
+                  className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-volt transition-transform duration-[--duration-ui] ease-[--ease-heavy] group-hover:scale-x-100"
                 />
               </Link>
             ))}
@@ -95,7 +95,7 @@ export default function Nav() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="relative -mr-2 flex h-12 w-12 items-center justify-center md:hidden"
+            className="relative flex h-12 w-12 items-center justify-center md:hidden"
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             <span aria-hidden className="flex w-6 flex-col gap-[5px]">

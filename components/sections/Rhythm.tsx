@@ -73,9 +73,12 @@ export default function Rhythm() {
           ))}
         </ol>
 
-        <div className="shell relative w-full text-center">
+        <div className={cn("shell relative w-full", reduced ? "text-left" : "text-center")}>
           {reduced ? (
-            <div className="space-y-6">
+            /* Left-aligned and width-capped: with motion off the object holds
+               its static pose on the right, and a centred list runs straight
+               into it. */
+            <div className="max-w-xl space-y-6">
               {BEATS.map((b) => (
                 <p key={b.word} className="display display-md text-bone">
                   {b.word}

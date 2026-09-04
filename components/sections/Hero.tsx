@@ -61,7 +61,8 @@ export default function Hero() {
         >
           <span className="label label-volt">EST. 2019</span>
           <span aria-hidden className="h-px w-8 bg-rule" />
-          <span className="label">{contact.address}</span>
+          <span className="label hidden sm:block">{contact.address}</span>
+          <span className="label sm:hidden">EAST DOCK</span>
         </motion.div>
 
         <h1 className="sr-only">Giants Gym — build your giant.</h1>

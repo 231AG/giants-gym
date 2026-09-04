@@ -14,10 +14,10 @@ import type { Piece } from "@/data/equipment";
 import type { Detail } from "./useEquipmentMaterials";
 
 const PIECES = {
-  dumbbell: { C: Dumbbell, scale: 1.05, y: 0 },
-  barbell: { C: Barbell, scale: 0.62, y: 0 },
-  kettlebell: { C: Kettlebell, scale: 1.5, y: -0.1 },
-  plate: { C: WeightPlate, scale: 1.0, y: 0 },
+  dumbbell: { C: Dumbbell, scale: 1.25, y: 0 },
+  barbell: { C: Barbell, scale: 0.7, y: 0 },
+  kettlebell: { C: Kettlebell, scale: 1.7, y: -0.1 },
+  plate: { C: WeightPlate, scale: 1.15, y: 0 },
 } as const;
 
 /**
@@ -51,7 +51,6 @@ function Rig({
   });
   const pitch = useRef(new HeavySpring(0.16, 60, 15, 1.4));
   const pitchTarget = useRef(0.16);
-  const enter = useRef(new HeavySpring(0, 70, 17, 1.3));
 
   const onDown = (e: ThreeEvent<PointerEvent>) => {
     if (reduced) return;
@@ -95,11 +94,13 @@ function Rig({
     s.yaw += s.yawVel * 60 * dt;
 
     pitch.current.update(pitchTarget.current, dt);
-    enter.current.update(1, dt);
 
     g.rotation.set(pitch.current.value, s.yaw, 0);
     g.position.y = entry.y;
-    g.scale.setScalar(entry.scale * enter.current.value);
+    // No scale-in: this piece is already on the rack when you arrive. Growing it
+    // from nothing only ever paid off if the canvas happened to be ready in time,
+    // and left it half-size whenever the deferred bundle landed late.
+    g.scale.setScalar(entry.scale);
   });
 
   return (
@@ -137,7 +138,7 @@ export default function EquipmentGallery({
       dpr={[1, detail === "high" ? 1.6 : 1.25]}
       frameloop={reduced ? "demand" : "always"}
       gl={{ antialias: detail === "high", alpha: true, powerPreference: "high-performance" }}
-      camera={{ fov: 34, position: [0, 0, 5.4] }}
+      camera={{ fov: 34, position: [0, 0, 5.15] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.05;

@@ -195,6 +195,45 @@ const presets = {
     await ctx.close();
   },
 
+  /** The 404. */
+  async notfound(browser) {
+    for (const [vp, name] of [[DESKTOP, "notfound-desktop"], [MOBILE, "notfound-mobile"]]) {
+      const ctx = await makeContext(browser, vp);
+      const page = await ctx.newPage();
+      await page.goto(`${BASE}/no-such-set`, { waitUntil: "networkidle" });
+      await page.waitForTimeout(900);
+      await shot(page, name);
+      await ctx.close();
+    }
+  },
+
+  /** Reduced motion: the same screens with the motion budget spent down. */
+  async reduced(browser) {
+    const ctx = await browser.newContext({
+      viewport: DESKTOP,
+      reducedMotion: "reduce",
+      deviceScaleFactor: 1,
+    });
+    const page = await ctx.newPage();
+    await ready(page, `${BASE}/`);
+    await shot(page, "reduced-01-hero");
+    for (const [id, name] of [
+      ["strength", "reduced-02-strength"],
+      ["forge", "reduced-03-forge"],
+      ["rhythm", "reduced-04-rhythm"],
+      ["transformation", "reduced-05-transformation"],
+    ]) {
+      const top = await page.evaluate((sid) => {
+        const el = document.getElementById(sid);
+        return el ? el.getBoundingClientRect().top + window.scrollY : null;
+      }, id);
+      if (top === null) continue;
+      await scrollTo(page, Math.round(top + 40), 900);
+      await shot(page, name);
+    }
+    await ctx.close();
+  },
+
   /** Console + page errors across the full scroll — the regression net. */
   async audit(browser) {
     const ctx = await makeContext(browser, DESKTOP);
@@ -214,7 +253,7 @@ const presets = {
   },
 };
 
-const order = ["intro", "hero", "transition", "story", "mobile", "audit"];
+const order = ["intro", "hero", "transition", "story", "mobile", "reduced", "notfound", "audit"];
 
 (async () => {
   await mkdir(OUT, { recursive: true });

@@ -45,7 +45,29 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={site.locale} className={`${anton.variable} ${inter.variable} ${mono.variable}`}>
+    <html
+      lang={site.locale}
+      className={`${anton.variable} ${inter.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Runs before first paint. The curtain is server-rendered so it is
+            already on screen at paint; this decides, synchronously, whether the
+            visitor should be seeing it at all. Keep the rules in step with
+            lib/intro-state.ts. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{
+var p=new URLSearchParams(location.search),play;
+if(p.has('nointro'))play=false;
+else if(p.has('intro'))play=true;
+else if(matchMedia('(prefers-reduced-motion: reduce)').matches)play=false;
+else play=sessionStorage.getItem('giants:intro')!=='1';
+document.documentElement.dataset.intro=play?'play':'skip';
+}catch(e){document.documentElement.dataset.intro='play';}})();`,
+          }}
+        />
+      </head>
       <body className="bg-void text-bone antialiased">{children}</body>
     </html>
   );
