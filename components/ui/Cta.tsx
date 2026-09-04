@@ -33,8 +33,8 @@ export default function Cta({ href, children, variant = "solid", className, onCl
         "font-mono text-[0.7rem] font-medium uppercase tracking-[0.24em]",
         "transition-colors duration-[--duration-micro]",
         solid
-          ? "bg-volt text-black"
-          : "border border-rule text-bone hover:border-volt hover:text-volt",
+          ? "bg-volt text-black hover:bg-bone"
+          : "border border-rule text-bone hover:border-volt",
         className,
       )}
     >
@@ -42,13 +42,6 @@ export default function Cta({ href, children, variant = "solid", className, onCl
         <span
           aria-hidden
           className="absolute inset-0 -translate-x-full bg-volt transition-transform duration-[--duration-ui] ease-[--ease-heavy] group-hover:translate-x-0"
-        />
-      )}
-      {solid && (
-        <span
-          aria-hidden
-          className="absolute inset-0 translate-x-0 bg-bone transition-transform duration-[--duration-ui] ease-[--ease-heavy] group-hover:translate-x-full"
-          style={{ opacity: 0 }}
         />
       )}
       <span

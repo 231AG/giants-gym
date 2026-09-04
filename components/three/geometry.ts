@@ -58,22 +58,32 @@ export function createRimBandGeometry(
 }
 
 /**
- * Kettlebell bell + handle. The bell is a lathed teardrop so the mass sits low,
- * which is the whole visual point of a kettlebell.
+ * Kettlebell bell + handle.
+ *
+ * The profile is a spline through hand-placed control points rather than a
+ * formula: a kettlebell's silhouette — heavy round base, sharp shoulder, pinched
+ * neck — is the thing that identifies it, and an analytic curve smooth enough to
+ * lathe cleanly is never quite the right shape.
  */
 export function createBellGeometry(segments: number) {
-  const pts: THREE.Vector2[] = [];
-  const steps = 24;
-  for (let i = 0; i <= steps; i++) {
-    const v = i / steps;
-    const y = -0.62 + v * 1.16;
-    // radius profile: wide and round at the base, pinched into a neck at the top
-    const r =
-      0.6 * Math.sqrt(Math.max(0.0001, 1 - Math.pow(v * 1.02 - 0.28, 2) / 0.62)) *
-      (1 - Math.pow(v, 3.4) * 0.62);
-    pts.push(new THREE.Vector2(Math.max(0.001, r), y));
-  }
-  pts.push(new THREE.Vector2(0.001, 0.56));
+  const control = [
+    new THREE.Vector2(0.004, -0.6),
+    new THREE.Vector2(0.3, -0.585),
+    new THREE.Vector2(0.5, -0.5),
+    new THREE.Vector2(0.6, -0.3),
+    new THREE.Vector2(0.605, -0.05),
+    new THREE.Vector2(0.52, 0.14),
+    new THREE.Vector2(0.34, 0.27),
+    new THREE.Vector2(0.205, 0.37),
+    new THREE.Vector2(0.178, 0.47),
+    new THREE.Vector2(0.178, 0.55),
+    new THREE.Vector2(0.004, 0.555),
+  ];
+  // Resampling the spline is what removes the faceting on the shoulder — a
+  // lathe is only ever as smooth as the profile you hand it.
+  const pts = new THREE.SplineCurve(control).getPoints(
+    segments >= 48 ? 72 : 34,
+  );
   const geo = new THREE.LatheGeometry(pts, segments);
   geo.computeVertexNormals();
   return geo;
