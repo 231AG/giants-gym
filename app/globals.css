@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   GIANTS GYM — design system
+   Dark, industrial, high-contrast. One accent: ELECTRIC LIME (--volt).
+   The accent is load-bearing, not decorative: it marks only the things that
+   represent energy or action — the CTA, the active state, the focus ring, the
+   live metric. Everything else lives in the black-to-bone greyscale.
+   ============================================================================= */
+
+@theme {
+  /* --- Surfaces ------------------------------------------------------------ */
+  --color-void: #050506;
+  --color-pitch: #0a0b0c;
+  --color-charcoal: #101214;
+  --color-steel: #17191c;
+  --color-iron: #23262a;
+  --color-rule: #2c3035;
+
+  /* --- Text ---------------------------------------------------------------- */
+  --color-bone: #edede8;
+  --color-ash: #9aa0a6;
+  --color-smoke: #62676d;
+
+  /* --- Accent (single direction) ------------------------------------------- */
+  --color-volt: #d7ff3e;
+  --color-volt-deep: #a9cc25;
+  --color-volt-dark: #2c3a08;
+
+  /* --- Type ---------------------------------------------------------------- */
+  --font-display: var(--font-anton), "Arial Narrow", "Haettenschweiler", sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-industrial), ui-monospace, "SFMono-Regular", monospace;
+
+  /* --- Motion timing (mirrors lib/motion-physics.ts) ----------------------- */
+  --ease-heavy: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-impact: cubic-bezier(0.2, 0.9, 0.1, 1);
+  --duration-micro: 200ms;
+  --duration-ui: 420ms;
+  --duration-story: 1000ms;
+}
+
+:root {
+  color-scheme: dark;
+  --nav-h: 4.5rem;
+}
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  html {
+    background: var(--color-void);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv05";
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-volt);
+    color: #000;
+  }
+
+  /* One visible, unmistakable focus treatment across the whole site. */
+  :focus-visible {
+    outline: 2px solid var(--color-volt);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Lenis keeps html/body in a fixed frame while it transforms the content. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  /* --- Display type -------------------------------------------------------- */
+  /* Anton is already condensed and heavy; the tightening here is what turns it
+     from a headline into a poster. Negative tracking + 0.82 leading. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.82;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+  }
+
+  /* Every display size is bounded by BOTH axes. A poster headline that clips the
+     top of the viewport is a bug, not aggression — `min(vw, svh)` keeps the scale
+     enormous while guaranteeing three lines always fit above the fold. */
+  .display-xl {
+    font-size: clamp(3.5rem, min(14.5vw, 18.5svh), 14rem);
+  }
+  .display-lg {
+    font-size: clamp(2.75rem, min(10vw, 15svh), 10rem);
+  }
+  .display-md {
+    font-size: clamp(2.25rem, min(6.5vw, 11svh), 6rem);
+  }
+  .display-sm {
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+  }
+
+  /* --- Industrial labels --------------------------------------------------- */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-smoke);
+  }
+  .label-volt {
+    color: var(--color-volt);
+  }
+
+  .body-lg {
+    font-size: clamp(1rem, 1.15vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--color-ash);
+  }
+
+  /* --- Layout -------------------------------------------------------------- */
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+    max-width: 105rem;
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* --- Industrial grid backdrop -------------------------------------------- */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-rule) 55%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-rule) 55%, transparent) 1px, transparent 1px);
+    background-size: 6.25rem 6.25rem;
+  }
+
+  /* --- Film grain ---------------------------------------------------------- */
+  /* An SVG feTurbulence tile, not a bitmap: ~0 bytes over the wire, resolution
+     independent, and it composites on the GPU. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    will-change: transform;
+    animation: grain-drift 6s steps(6) infinite;
+  }
+
+  @keyframes grain-drift {
+    0% { transform: translate3d(0, 0, 0); }
+    16% { transform: translate3d(-2%, 1%, 0); }
+    33% { transform: translate3d(1%, -2%, 0); }
+    50% { transform: translate3d(-1%, 2%, 0); }
+    66% { transform: translate3d(2%, 1%, 0); }
+    83% { transform: translate3d(-2%, -1%, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+
+  /* --- Reveal primitives --------------------------------------------------- */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    /* clip-path avoids the descender clipping that overflow alone causes */
+    clip-path: inset(-0.12em 0 -0.06em 0);
+  }
+
+  .edge-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* =============================================================================
+   Reduced motion — the brief asks for a *significant* reduction, not a token one.
+   Continuous animation stops entirely; the scroll-driven 3D director switches to
+   discrete section poses (handled in TS); parallax and grain drift are removed.
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain::after {
+    animation: none;
+    opacity: 0.035;
+  }
+}
