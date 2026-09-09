@@ -7,6 +7,7 @@ import { nav, cta, site } from "@/config/site";
 import { scrollStore } from "@/lib/scroll-store";
 import { EASE } from "@/lib/motion-physics";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 /**
  * Minimal bar: wordmark, three links, one CTA.
@@ -82,6 +83,7 @@ export default function Nav() {
                 />
               </Link>
             ))}
+            <ThemeToggle />
             <Link
               href={cta.primary.href}
               className="border border-volt px-5 py-2.5 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-volt transition-colors duration-[--duration-micro] hover:bg-volt hover:text-black"
@@ -150,6 +152,14 @@ export default function Nav() {
                 </motion.li>
               ))}
             </ul>
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.28, duration: 0.6, ease: EASE.heavy }}
+              className="mt-6"
+            >
+              <ThemeToggle mobile />
+            </motion.div>
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
