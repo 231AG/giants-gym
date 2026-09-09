@@ -41,8 +41,37 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --nav-h: 4.5rem;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-void: #050506;
+  --color-pitch: #0a0b0c;
+  --color-charcoal: #101214;
+  --color-steel: #17191c;
+  --color-iron: #23262a;
+  --color-rule: #2c3035;
+  --color-bone: #edede8;
+  --color-ash: #9aa0a6;
+  --color-smoke: #62676d;
+}
+
+html[data-theme="light"] {
+  --color-void: #f2f1ec;
+  --color-pitch: #e9e8e2;
+  --color-charcoal: #deded7;
+  --color-steel: #d0d1c9;
+  --color-iron: #b8bbb2;
+  --color-rule: #a9ada3;
+  --color-bone: #17191a;
+  --color-ash: #4f5655;
+  --color-smoke: #707774;
+  --color-volt: #9ab91e;
+  --color-volt-deep: #789313;
+  --color-volt-dark: #e3edb5;
 }
 
 @layer base {

@@ -37,8 +37,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050506",
-  colorScheme: "dark",
+  themeColor: "#f2f1ec",
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
@@ -58,6 +58,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{
+var t=localStorage.getItem('giants:theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light';
 var p=new URLSearchParams(location.search),play;
 if(p.has('nointro'))play=false;
 else if(p.has('intro'))play=true;
